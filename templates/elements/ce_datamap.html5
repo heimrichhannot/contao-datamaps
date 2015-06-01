@@ -1,0 +1,7 @@
+<?php $this->extend('block_searchable'); ?>
+
+<?php $this->block('content'); ?>
+
+<div id="<?php echo $this->datamapCssID; ?>" class="datamap <?php echo $this->datamapCssClass; ?>"></div>
+
+<?php $this->endblock(); ?>
