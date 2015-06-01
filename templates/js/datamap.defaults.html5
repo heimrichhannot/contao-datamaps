@@ -123,8 +123,9 @@
 });
 
 
-	window.addEventListener('resize', function() {
-		map.resize();
-	});
+		//responsive
+			d3.select(window).on('resize', function() {
+			map.resize();
+		});
 
 })(jQuery);

@@ -1,7 +1,7 @@
 geographyConfig: {
 	dataUrl: 'system/modules/datamaps/assets/mapdata/custom/de/de-federal-states.json',
 	highlightOnHover: <?php echo $this->highlightOnHover; ?>,
-	popupOnHover: <?php echo $this->popupOnHover; ?>,
+	popupOnHover: <?php echo $this->popupOnHover; ?>
 },
 setProjection: function(element) {
 	var projection = d3.geo.mercator()
@@ -29,7 +29,7 @@ bubblesConfig: {
 	highlightFillOpacity: 0.85,
 	popupTemplate: function(geography, data) {
 		return '<div class="hoverinfo"><strong>' + data.title + '</strong></div>';
-	},
+	}
 },
 arcConfig: {
 	strokeColor: '#DD1C77',

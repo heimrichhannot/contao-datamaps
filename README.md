@@ -7,3 +7,7 @@ Contao port of [DataMaps](http://datamaps.github.io/) that creates customizable 
 - bubbles support (geocoding using dlh_geocode library, link target, title, fill, radius, border, popup, label including x/y- offset, publish)
 - state support (link target, title, fill, label including x/y- offset, publish)
 - predefine custom fill groups on parent backend entity and use them with bubble and states
+
+# TODO
+- translation 
+- howto: create your own map
