@@ -92,12 +92,14 @@ class DataMapConfig extends \Controller
 	{
 		$arrValues = array();
 
+		\Controller::loadDataContainer($objModel::getTable());
+
 		foreach($objModel->row() as $key => $value)
 		{
 			if(!isset($GLOBALS['TL_DCA'][$objModel::getTable()]['fields'][$key])) continue;
 
 			$arrData = $GLOBALS['TL_DCA'][$objModel::getTable()]['fields'][$key];
-
+			
 			if(!isset($arrData['inputType']) || in_array($key, $arrSkipFields)) continue;
 
 			if($arrData['eval']['rgxp'] == 'digit')

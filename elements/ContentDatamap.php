@@ -35,7 +35,7 @@ class ContentDatamap extends \ContentElement
 
 	protected function compile()
 	{
-		DataMapConfig::createConfigJs($this->objConfig, true, $this); // $this is needed for reference (replaceinserttags)
+		DataMapConfig::createConfigJs($this->objConfig); // $this is needed for reference (replaceinserttags)
 		$this->Template->datamapCssID = DataMapConfig::getCssIDFromModel($this->objConfig);
 		$this->Template->datamapCssClass = DataMapConfig::getCSSClassFromModel($this->objConfig);
 	}
