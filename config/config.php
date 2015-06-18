@@ -32,7 +32,7 @@ array_insert($GLOBALS['BE_MOD']['content'], count($GLOBALS['BE_MOD']['content'])
 	'datamaps' => array
 	(
 		'tables'      => array('tl_datamaps', 'tl_datamaps_elements'),
-		'icon'   	 => 'system/modules/datamaps/assets/icon.png',
+		'icon'   	 => 'system/modules/datamaps/assets/img/icon.png',
 	)
   )
 );
