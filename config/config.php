@@ -18,9 +18,14 @@ define(DATAMAP_ELEMENT_STATE, 'STATE');
  * Content elements
  */
 $GLOBALS['TL_CTE']['includes']['datamap'] = 'HeimrichHannot\Datamaps\ContentDatamap';
-$GLOBALS['TL_JAVASCRIPT']['d3.js'] = 'system/modules/datamaps/assets/vendor/d3/d3.min.js';
-$GLOBALS['TL_JAVASCRIPT']['topojson'] = 'system/modules/datamaps/assets/vendor/topojson/topojson.js';
-$GLOBALS['TL_JAVASCRIPT']['datamaps.all'] = 'system/modules/datamaps/assets/vendor/datamaps/dist/datamaps.all.min.js';
+
+if(TL_MODE == 'FE')
+{
+	$GLOBALS['TL_JAVASCRIPT']['d3.js'] = 'system/modules/datamaps/assets/vendor/d3/d3' . (!$GLOBALS['TL_CONFIG']['debugMode'] ? '.min' : '') . '.js|static';
+	$GLOBALS['TL_JAVASCRIPT']['topojson'] = 'system/modules/datamaps/assets/vendor/topojson/topojson' . (!$GLOBALS['TL_CONFIG']['debugMode'] ? '.min' : '') . '.js|static';
+	$GLOBALS['TL_JAVASCRIPT']['datamaps.all'] = 'system/modules/datamaps/assets/vendor/datamaps/dist/datamaps.all' . (!$GLOBALS['TL_CONFIG']['debugMode'] ? '.min' : '') . '.js|static';
+}
+
 $GLOBALS['TL_USER_CSS']['datamaps']     = 'system/modules/datamaps/assets/css/datamaps.less|screen|static|1.0.0';
 
 
