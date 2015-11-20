@@ -45,4 +45,5 @@ TemplateLoader::addFiles(array
 	'datamap.defaults'          => 'system/modules/datamaps/templates/js',
 	'ce_datamap'                => 'system/modules/datamaps/templates/elements',
 	'datamap_de_federal_states' => 'system/modules/datamaps/templates/datamaps/de',
+	'datamap_world_states' 	    => 'system/modules/datamaps/templates/datamaps/',
 ));

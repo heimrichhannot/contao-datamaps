@@ -57,6 +57,7 @@ $GLOBALS['TL_DATAMAPS'] = array_merge
 	is_array($GLOBALS['TL_DATAMAPS']) ? $GLOBALS['TL_DATAMAPS'] : array(),
 	array
 	(
-		'de_federal_states' => 'datamap_de_federal_states'
+		'de_federal_states' => 'datamap_de_federal_states',
+		'world_states' => 'datamap_world_states'
 	)
 );
