@@ -98,7 +98,7 @@ $GLOBALS['TL_DCA']['tl_datamaps'] = array
 	'palettes' => array
 	(
 		'__selector__' => array('type'),
-		'default'      => '{title_legend},type,title;{geography_legend},highlightOnHover,popupOnHover;{fills_legend},defaultFill,fills'
+		'default'      => '{title_legend},type,title;{geography_legend},popupOnHover,highlightOnHover,highlightFillColor,highlightBorderColor,highlightBorderWidth;{fills_legend},defaultFill,fills'
 	),
 	// Fields
 	'fields'   => array
@@ -110,6 +110,10 @@ $GLOBALS['TL_DCA']['tl_datamaps'] = array
 		'tstamp' => array
 		(
 			'sql' => "int(10) unsigned NOT NULL default '0'"
+		),
+		'rewrite' => array
+		(
+			'sql' => "char(1) NOT NULL default ''"
 		),
 		'title'  => array
 		(
@@ -154,8 +158,35 @@ $GLOBALS['TL_DCA']['tl_datamaps'] = array
 			'exclude'   => true,
 			'default'	=> 'rgb(194,197,200)',
 			'inputType' => 'text',
-			'eval'      => array('mandatory' => true, 'maxlength' => 32, 'tl_class' => 'clr'),
+			'eval'      => array('mandatory' => true, 'maxlength' => 32, 'tl_class' => 'clr', 'decodeEntities' => true),
 			'sql'       => "varchar(32) NOT NULL default ''"
+		),
+		'highlightFillColor'  => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_datamaps']['highlightFillColor'],
+			'exclude'   => true,
+			'default'	=> 'rgb(252,141,89)',
+			'inputType' => 'text',
+			'eval'      => array('mandatory' => true, 'maxlength' => 32, 'tl_class' => 'clr', 'decodeEntities' => true),
+			'sql'       => "varchar(32) NOT NULL default ''"
+		),
+		'highlightBorderColor'  => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_datamaps']['highlightBorderColor'],
+			'exclude'   => true,
+			'default'	=> 'rgba(250, 15, 160, 0.2)',
+			'inputType' => 'text',
+			'eval'      => array('mandatory' => true, 'maxlength' => 32, 'tl_class' => 'clr', 'decodeEntities' => true),
+			'sql'       => "varchar(32) NOT NULL default ''"
+		),
+		'highlightBorderWidth'  => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_datamaps']['highlightBorderWidth'],
+			'exclude'   => true,
+			'default'	=> '2',
+			'inputType' => 'text',
+			'eval'      => array('mandatory' => true, 'maxlength' => 10, 'tl_class' => 'clr', 'rgxp' => 'digit'),
+			'sql'       => "int(10) unsigned NOT NULL default '0'"
 		),
 		'fills'  => array
 		(

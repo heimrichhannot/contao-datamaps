@@ -19,22 +19,57 @@ class DataMapConfig extends \Controller
 
 	protected $objConfig;
 
-	protected function __construct($objConfig)
+	public function __construct($objConfig)
 	{
 		parent::__construct();
 
 		$this->objConfig = $objConfig;
 	}
 
-	public static function createConfigJs($objConfig, $debug = true)
+	public static function createConfigJs($objConfig, $debug = false)
 	{
+		if(!static::isJQueryEnabled()) return false;
+
 		$objInstance = new static($objConfig);
+
+		$cache = !$GLOBALS['TL_CONFIG']['debugMode'];
 
 		$objT = new \FrontendTemplate('datamap.defaults');
 		$objT->config = $objInstance->getConfigJs();
 		$objT->bubbles = $objInstance->getConfigBubblesJs();
 		$objT->states = $objInstance->getConfigStateJs();
 		$objT->cssID = static::getCssIDFromModel($objConfig);
+
+		$strName = $objT->cssID;
+		$strFile = 'assets/js/' . $strName . '.js';
+		$strFileMinified = 'assets/js/' . $strName . '.min.js';
+
+		$objFile = new \File($strFile, file_exists(TL_ROOT . '/' . $strFile));
+		$objFileMinified = new \File($strFileMinified, file_exists(TL_ROOT . '/' . $strFileMinified));
+		$minify = $cache && class_exists('\MatthiasMullie\Minify\JS');
+
+		// simple file caching
+		if(static::doRewrite($objConfig, $objFile, $objFileMinified, $cache, $debug))
+		{
+			$strChunk = $objT->parse();
+			$objFile->write($objT->parse());
+			$objFile->close();
+
+			// minify js
+			if($minify)
+			{
+				$objFileMinified = new \File($strFileMinified);
+				$objMinify = new \MatthiasMullie\Minify\JS();
+				$objMinify->add($strChunk);
+				$objFileMinified->write(rtrim($objMinify->minify(), ";") . ";"); // append semicolon, otherwise "(intermediate value)(...) is not a function"
+				$objFileMinified->close();
+			}
+		}
+
+		$GLOBALS['TL_JAVASCRIPT']['d3.js'] = 'system/modules/datamaps/assets/vendor/d3/d3' . (!$GLOBALS['TL_CONFIG']['debugMode'] ? '.min' : '') . '.js|static';
+		$GLOBALS['TL_JAVASCRIPT']['topojson'] = 'system/modules/datamaps/assets/vendor/topojson/topojson.js|static';
+		$GLOBALS['TL_JAVASCRIPT']['datamaps.all'] = 'system/modules/datamaps/assets/vendor/datamaps/dist/datamaps.all' . (!$GLOBALS['TL_CONFIG']['debugMode'] ? '.min' : '') . '.js|static';
+		$GLOBALS['TL_JAVASCRIPT'][$strName] = $minify ? ($strFileMinified . '|static') : $strFile;
 
 		$strFile = 'assets/js/' . $objT->cssID . '.js';
 
@@ -47,6 +82,33 @@ class DataMapConfig extends \Controller
 		}
 		
 		$GLOBALS['TL_JAVASCRIPT']['datamap_' . $objT->cssID] = $strFile . (!$debug ? '|static' : '');
+	}
+
+	public static function doRewrite($objConfig, $objFile, $objFileMinified, $cache, $debug)
+	{
+		$rewrite = $objConfig->tstamp > $objFile->mtime || $objFile->size == 0 || ($cache && $objFileMinified == 0) || $debug;
+
+		// child elements update trigger
+		if($objConfig->rewrite)
+		{
+			$rewrite = true;
+			$objConfig->rewrite = false;
+			$objConfig->save();
+		}
+
+		return $rewrite;
+	}
+
+	public static function isJQueryEnabled()
+	{
+		global $objPage;
+
+		$blnMobile = ($objPage->mobileLayout && \Environment::get('agent')->mobile);
+
+		$intId = ($blnMobile && $objPage->mobileLayout) ? $objPage->mobileLayout : $objPage->layout;
+		$objLayout = \LayoutModel::findByPk($intId);
+
+		return $objLayout->addJQuery;
 	}
 
 	protected function getConfigJs()

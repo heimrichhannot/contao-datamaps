@@ -1,7 +1,10 @@
 geographyConfig: {
 	dataUrl: 'system/modules/datamaps/assets/mapdata/custom/de/de-federal-states.json',
-	highlightOnHover: <?php echo $this->highlightOnHover; ?>,
-	popupOnHover: <?php echo $this->popupOnHover; ?>
+	highlightOnHover: <?= $this->highlightOnHover; ?>,
+	highlightFillColor : '<?= $this->highlightFillColor ?: 'rgb(252,141,89)'; ?>',
+	highlightBorderColor : '<?= $this->highlightBorderColor ?: 'rgba(250, 15, 160, 0.2)'; ?>',
+	highlightBorderWidth : <?= $this->highlightBorderWidth ?: 2; ?>,
+	popupOnHover: <?= $this->popupOnHover; ?>
 },
 setProjection: function(element) {
 	var projection = d3.geo.mercator()

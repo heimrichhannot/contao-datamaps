@@ -23,7 +23,15 @@ $GLOBALS['TL_DCA']['tl_datamaps_elements'] = array
 			(
 				'id' => 'primary'
 			)
-		)
+		),
+		'onsubmit_callback' => array
+		(
+			array('tl_datamaps_elements', 'setRewriteFlag')
+		),
+		'ondelete_callback' => array
+		(
+			array('tl_datamaps_elements', 'setRewriteFlag')
+		),
 	),
 	// List
 	'list'        => array
@@ -343,6 +351,10 @@ $GLOBALS['TL_DCA']['tl_datamaps_elements'] = array
 			'filter'    => true,
 			'flag'      => 1,
 			'inputType' => 'checkbox',
+			'save_callback' => array
+			(
+				array('tl_datamaps_elements', 'setRewriteFlagOnPublish')
+			),
 			'eval'      => array('submitOnChange' => true, 'doNotCopy' => true),
 			'sql'       => "char(1) NOT NULL default ''"
 		),
@@ -434,7 +446,7 @@ class tl_datamaps_elements extends Backend
 	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
 	{
 		if (strlen($this->Input->get('tid'))) {
-			$this->toggleVisibility($this->Input->get('tid'), ($this->Input->get('state') == 1));
+			$this->toggleVisibility($this->Input->get('tid'), ($this->Input->get('state') == 1), (@func_get_arg(12) ?: null));
 			$this->redirect($this->getReferer());
 		}
 
@@ -460,7 +472,7 @@ class tl_datamaps_elements extends Backend
 	 * @param integer
 	 * @param boolean
 	 */
-	public function toggleVisibility($intId, $blnVisible)
+	public function toggleVisibility($intId, $blnVisible, DataContainer $dc=null)
 	{
 		// Check permissions to publish
 		if (!$this->User->isAdmin && !$this->User->hasAccess('tl_datamaps_elements::published', 'alexf')) {
@@ -476,7 +488,7 @@ class tl_datamaps_elements extends Backend
 			foreach ($GLOBALS['TL_DCA']['tl_datamaps_elements']['fields']['published']['save_callback'] as $callback) {
 				if (is_array($callback)) {
 					$this->import($callback[0]);
-					$blnVisible = $this->$callback[0]->$callback[1]($blnVisible, $this);
+					$blnVisible = $this->$callback[0]->$callback[1]($blnVisible, ($dc ?: $this));
 				} elseif (is_callable($callback)) {
 					$blnVisible = $callback($blnVisible, $this);
 				}
@@ -640,5 +652,59 @@ class tl_datamaps_elements extends Backend
 				  . $GLOBALS['TL_LANG']['tl_datamaps_elements']['references'][$arrRow['type']] . '</div>' . "\n";
 
 		return $return;
+	}
+
+	/**
+	 * Callback, that detects the current element and triggers set rewrite flag on parent datamap
+	 *
+	 * @param DataContainer $dc
+	 *
+	 * @return bool
+	 */
+	public function setRewriteFlag(DataContainer $dc)
+	{
+		$objElement = \HeimrichHannot\Datamaps\DatamapsElementsModel::findByPk($dc->id);
+
+		if($objElement === null)
+		{
+			return false;
+		}
+
+		$this->setRewriteOnParent($objElement->pid);
+	}
+
+	/**
+	 * Trigger set rewrite flag on parent datamap on toggle element
+	 *
+	 * @param Boolean       $varValue
+	 * @param DataContainer $dc
+	 *
+	 * @return mixed
+	 */
+	public function setRewriteFlagOnPublish($varValue, DataContainer $dc)
+	{
+		$this->setRewriteOnParent($dc->id);
+
+		return $varValue;
+	}
+
+	/**
+	 * Set rewrite flag on parent datamap
+	 *
+	 * @param $intParent DataMapsModel ID
+	 *
+	 * @return bool
+	 */
+	public function setRewriteOnParent($intParent)
+	{
+		$objDataMap = HeimrichHannot\Datamaps\DataMapsModel::findByPk($intParent);
+
+		if($objDataMap === null)
+		{
+			return false;
+		}
+
+		$objDataMap->rewrite = true;
+		$objDataMap->save();
 	}
 }

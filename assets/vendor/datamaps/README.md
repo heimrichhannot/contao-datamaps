@@ -18,10 +18,10 @@ Out of the box it includes support for choropleths and bubble maps (see [demos](
 
 Downloads:
 
- - [World map (94kb, 36.7kb gzip'd)](http://datamaps.github.io/scripts/datamaps.world.min.js)
- - [USA only (35kb, 13.9kb gzip'd)](http://datamaps.github.io/scripts/datamaps.usa.min.js)
- - [USA & World (131kb, 47.1kb gzip'd)](http://datamaps.github.io/scripts/datamaps.all.min.js)
- - [No preset topojson (6.8kb, 2.3kb gzip'd)](http://datamaps.github.io/scripts/datamaps.none.min.js)
+ - [World map (94kb, 36.7kb gzip'd)](http://datamaps.github.io/scripts/0.4.2/datamaps.world.min.js)
+ - [USA only (35kb, 13.9kb gzip'd)](http://datamaps.github.io/scripts/0.4.2/datamaps.usa.min.js)
+ - [USA & World (131kb, 47.1kb gzip'd)](http://datamaps.github.io/scripts/0.4.2/datamaps.all.min.js)
+ - [No preset topojson (6.8kb, 2.3kb gzip'd)](http://datamaps.github.io/scripts/0.4.2/datamaps.none.min.js)
 
 
 ### Documentation
@@ -123,12 +123,13 @@ A map of the USA with an Albers based projection will be default if you only inc
         setProjection: function(element, options) {
             var projection, path;
             projection = d3.geo.albersUsa()
+                .center([long, lat])
                 .scale(element.offsetWidth)
                 .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
 }
             path = d3.geo.path()
                 .projection( projection );
-            
+
             return {path: path, projection: projection};
         }
     });
@@ -193,9 +194,15 @@ map.updateChoropleth({
 });
 ```
 
-You can specify either a literal color (as a string), or an object with a fillKey property. 
+You can specify either a literal color (as a string), or an object with a fillKey property.
 
 You can also add a map legend with the `legend` plugin (used above)
+
+#### Choropleth with auto-calculated color
+
+Example [highmaps_world.html](src/examples/highmaps_world.html) explains how to create colorized map based on some quantity of things, like here [In the USA, Who Runs the Fastest, the Farthest...](http://data.runkeeper.com/rk-usa-running-stats-by-state). Example showcase:
+
+![auto calculated color](/src/screenshots/datamap_highmap_exmaple.jpg)
 
 #### Custom popup on hover
 
@@ -232,7 +239,7 @@ Expanding on the previous example of using `data`, any property passed into `dat
     });
 </script>
 ```
-    
+
 `geographyConfig.popupTemplate` just needs to return an HTML string, so feel free to use [Handlebars](https://github.com/wycats/handlebars.js/) or [Underscore](http://underscorejs.org/#template) templates (instead of the terrible Array.join method above).
 
 
@@ -289,7 +296,7 @@ var bombMap = new Datamap({
         date: '1955-11-22',
         latitude: 50.07,
         longitude: 78.43
-     
+
       },{
         name: 'Tsar Bomba',
         radius: 75,
@@ -304,7 +311,7 @@ var bombMap = new Datamap({
     ];
 //draw bubbles for bombs
 bombMap.bubbles(bombs, {
-    popupTemplate: function (geo, data) { 
+    popupTemplate: function (geo, data) {
             return ['<div class="hoverinfo">' +  data.name,
             '<br/>Payload: ' +  data.yield + ' kilotons',
             '<br/>Country: ' +  data.country + '',
@@ -321,13 +328,14 @@ The first parameter to `bubbles` should be an array of objects, each with **at l
   - `latitude`
   - `longitude`
   - `radius`
- 
+
 Optionally, pass in `fillKey` to color code the bubble, and pass in any other data you want to render in a popup template which can be overridden in the options parameter.
 
 For further customization, you can set these properties on each bubble to override the options parameter (or default options):
 
   - `borderColor`
   - `borderWidth`
+  - `borderOpacity`
   - `fillOpacity`
 
 The second parameter is the `options` param, where you can overide any of the default options (documented below)
@@ -353,15 +361,26 @@ The following options are allowed:
   - `lineWidth` //line width for New England states, default: 1
   - `fontSize` //font size, default: 10
   - `fontFamily` //font family, default: 'Verdana'
+  - `customLabelText` //replaces 2 letter labels with custom 
 
-An example for using the options: 
+An example for using the options:
 
 ```javascript
 map.labels({labelColor: 'blue', fontSize: 12});
 ```
 
+An example for using the customLabelText
 
+This accepts an object whose keys are uppercase 2 letter state codes. 
+Values will be substituted for default label text
+Any missing values default to 2 state letters
+```javascript
+newLabels = {'AK':'Alaska', 'AL':'123',.......};
+map.labels({'customLabelText': newLabels});
+```
+Example [custom-labels.html](src/examples/custom-labels.html) for using the customLabelText
 
+![custom labels](/src/screenshots/datamap_custom_label_example.png)
 
 #### Zooming
 
@@ -380,7 +399,7 @@ var map = new Datamap({
       .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
     var path = d3.geo.path()
       .projection(projection);
-    
+
     return {path: path, projection: projection};
   },
 ```
@@ -407,12 +426,14 @@ All events are bubbled up to the root `svg` element and to listen to events, use
         }
     });
 </script>
-```  
+```
 
 #### Responsive Maps
 Set `responsive` to `true` and then listen for `resize` events on `window`, and call `Datamaps.prototype.resize`.
 
 Avoid setting the height and width of the `container` with hard pixel values, instead use percent values. (use `50%` instead of `500px`.
+
+If the aspect ratio of your custom map is not the default `16:9` (`0.5625`), you should use the `aspectRatio` option to set it appropriately (eg. `0.3` for a `3:1` aspect ratio).
 
 ```html
 <div id="container"></div>
@@ -421,16 +442,16 @@ Avoid setting the height and width of the `container` with hard pixel values, in
         element: document.getElementById('container'),
         responsive: true
     });
-    
+
     window.addEventListener('resize', function() {
         map.resize();
     });
-    
+
     //alternatively with d3
     d3.select(window).on('resize', function() {
         map.resize();
     });
-    
+
     //alternatively with jQuery
     $(window).on('resize', function() {
        map.resize();
@@ -458,6 +479,7 @@ Avoid setting the height and width of the `container` with hard pixel values, in
         dataUrl: null, //if not null, datamaps will fetch the map JSON (currently only supports topojson)
         hideAntarctica: true,
         borderWidth: 1,
+        borderOpacity: 1,
         borderColor: '#FDFDFD',
         popupTemplate: function(geography, data) { //this function should just return a string
           return '&lt;div class="hoverinfo"&gt;&lt;strong&gt;' + geography.properties.name + '&lt;/strong&gt;&lt;/div&gt;';
@@ -466,21 +488,28 @@ Avoid setting the height and width of the `container` with hard pixel values, in
         highlightOnHover: true,
         highlightFillColor: '#FC8D59',
         highlightBorderColor: 'rgba(250, 15, 160, 0.2)',
-        highlightBorderWidth: 2
+        highlightBorderWidth: 2,
+        highlightBorderOpacity: 1
     },
     bubblesConfig: {
         borderWidth: 2,
+        borderOpacity: 1,
         borderColor: '#FFFFFF',
         popupOnHover: true,
+        radius: null,
         popupTemplate: function(geography, data) {
-          return '&lt;div class="hoverinfo"&gt;&lt;strong&gt;' + data.name + '&lt;/strong&gt;&lt;/div&gt;';
+          return '<div class="hoverinfo"><strong>' + data.name + '</strong></div>';
         },
         fillOpacity: 0.75,
+        animate: true,
         highlightOnHover: true,
         highlightFillColor: '#FC8D59',
         highlightBorderColor: 'rgba(250, 15, 160, 0.2)',
         highlightBorderWidth: 2,
-        highlightFillOpacity: 0.85
+        highlightBorderOpacity: 1,
+        highlightFillOpacity: 0.85,
+        exitDelay: 100,
+        key: JSON.stringify
     },
     arcConfig: {
       strokeColor: '#DD1C77',
@@ -494,5 +523,5 @@ Avoid setting the height and width of the `container` with hard pixel values, in
 
 #Contributing Guidelines
 
-* Do not run the `grunt build` task or submit any built files in your PR. 
+* Do not run the `grunt build` task or submit any built files in your PR.
 * Have an example in `src/examples` if adding a new feature. Copy an existing feature `.html` file to start.

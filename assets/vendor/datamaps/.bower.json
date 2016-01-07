@@ -1,6 +1,6 @@
 {
   "name": "datamaps",
-  "version": "0.4.0",
+  "version": "0.4.3",
   "homepage": "https://github.com/markmarkoh/datamaps",
   "authors": [
     "Mark DiMarco<markmarkoh@gmail.com>"
@@ -9,7 +9,9 @@
     "Dave Long (dave@davejlong.com)"
   ],
   "description": "Interactive maps for data visualizations. Bundled into a single Javascript file.",
-  "main": "dist/datamaps.all.js",
+  "main": [
+    "dist/datamaps.all.js"
+  ],
   "keywords": [
     "USA",
     "World",
@@ -26,17 +28,17 @@
     "public"
   ],
   "dependencies": {
-    "d3": "~3.3.8",
-    "topojson": "~1.4.3"
+    "d3": "^3.5.6",
+    "topojson": "^1.6.19"
   },
-  "_release": "0.4.0",
+  "_release": "0.4.3",
   "_resolution": {
     "type": "version",
-    "tag": "v0.4.0",
-    "commit": "a0cced0ddcb6bb4b7b9796bd599d5b1ac845baca"
+    "tag": "v0.4.3",
+    "commit": "f3a7f40b5468ae1fd1c9530734f8d8a0dde99bdb"
   },
   "_source": "git://github.com/markmarkoh/datamaps.git",
-  "_target": "~0.4.0",
+  "_target": "~0.4.3",
   "_originalSource": "datamaps",
   "_direct": true
 }

@@ -18,7 +18,8 @@
     },
     "require": {
         "contao/core": ">=3.3,<4-dev",
-        "delahaye/dlh_geocode": ">=1.0,<2-dev"
+        "delahaye/dlh_geocode": ">=1.0,<2-dev",
+        "matthiasmullie/minify": "~1.3"
     },
     "autoload": {
         "classmap": [""]
