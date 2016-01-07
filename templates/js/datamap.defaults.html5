@@ -128,4 +128,9 @@
 			map.resize();
 		});
 
+		// bootstrap collapse
+		$('[data-toggle=collapse]').on('shown.bs.collapse', function () {
+			map.resize();
+		});
+
 })(jQuery);
