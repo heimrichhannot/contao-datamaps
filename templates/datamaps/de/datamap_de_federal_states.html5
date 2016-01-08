@@ -6,21 +6,22 @@ geographyConfig: {
 	highlightBorderWidth : <?= $this->highlightBorderWidth ?: 2; ?>,
 	popupOnHover: <?= $this->popupOnHover; ?>
 },
-setProjection: function(element) {
+setProjection: function(element, options) {
 	var projection = d3.geo.mercator()
-					 .center([10, 50])
+					 .center([10.45, 51.3])
 					 .rotate([0, 0])
-					 .scale(2700)
-					 .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
+					 .scale(element.offsetWidth * 6)
+                     .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
 
 	var path = d3.geo.path().projection(projection);
 
 	return {path: path, projection: projection};
 },
 scope: 'de-federal-states',
-height: null, //if not null, datamaps will grab the height of 'element'
 width: null, //if not null, datamaps will grab the width of 'element',
+height: null, //if not null, datamaps will grab the height of 'element'
 responsive: true, //if true, call `resize()` on the map object when it should adjust it's size
+aspectRatio: .88,
 done: function() {}, //callback when the map is done drawing
 bubblesConfig: {
 	fillColor: 'white',
