@@ -69,7 +69,6 @@ class DataMapConfig extends \Controller
 		$GLOBALS['TL_JAVASCRIPT']['d3.js'] = 'system/modules/datamaps/assets/vendor/d3/d3' . (!$GLOBALS['TL_CONFIG']['debugMode'] ? '.min' : '') . '.js|static';
 		$GLOBALS['TL_JAVASCRIPT']['topojson'] = 'system/modules/datamaps/assets/vendor/topojson/topojson.js|static';
 		$GLOBALS['TL_JAVASCRIPT']['datamaps.all'] = 'system/modules/datamaps/assets/vendor/datamaps/dist/datamaps.all' . ($GLOBALS['TL_CONFIG']['debugMode'] ? '.min' : '') . '.js|static';
-		$GLOBALS['TL_JAVASCRIPT']['jquery.actual'] = 'system/modules/datamaps/assets/vendor/jquery.actual/jquery.actual' . (!$GLOBALS['TL_CONFIG']['debugMode'] ? '.min' : '') . '.js|static';
 		$GLOBALS['TL_JAVASCRIPT'][$strName] = $minify ? ($strFileMinified . '|static') : $strFile;
 	}
 
