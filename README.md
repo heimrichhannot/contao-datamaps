@@ -13,3 +13,4 @@ Contao port of [DataMaps](http://datamaps.github.io/) that creates customizable 
 - howto: create your own map
 - refactoring
 - labels
+- update readme
