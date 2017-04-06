@@ -133,7 +133,7 @@ class DataMapConfig extends \Controller
 		
 		$objT = new \FrontendTemplate($GLOBALS['TL_DATAMAPS'][$this->objConfig->type]);
 		$objT->setData(static::getModelValuesAsStringArray($this->objConfig, array('title', 'type', 'fills', 'defaultFill')));
-		$objT->config = \String::decodeEntities($strConfig);
+		$objT->config = \StringUtil::decodeEntities($strConfig);
 
 		return $objT->parse();
 	}
@@ -192,7 +192,7 @@ class DataMapConfig extends \Controller
 			$arrData[$objElements->geoID] = $this->generateElementData($objElements, $this->objConfig);
 		}
 
-		return \String::decodeEntities(json_encode($arrData));
+		return \StringUtil::decodeEntities(json_encode($arrData));
 	}
 
 	protected function getConfigBubblesJs()
@@ -211,7 +211,7 @@ class DataMapConfig extends \Controller
 			$arrData[] = $this->generateElementData($objElements, $this->objConfig);
 		}
 
-		return \String::decodeEntities(json_encode($arrData));
+		return \StringUtil::decodeEntities(json_encode($arrData));
 	}
 
 	protected function generateElementData($objItem)
@@ -250,7 +250,7 @@ class DataMapConfig extends \Controller
 			// Link to an external page
 			case 'external':
 				if (substr($objItem->url, 0, 7) == 'mailto:') {
-					self::$arrUrlCache[$strCacheKey] = \String::encodeEmail($objItem->url);
+					self::$arrUrlCache[$strCacheKey] = \StringUtil::encodeEmail($objItem->url);
 				} else {
 					self::$arrUrlCache[$strCacheKey] = ampersand($objItem->url);
 				}

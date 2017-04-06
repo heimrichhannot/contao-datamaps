@@ -488,7 +488,7 @@ class tl_datamaps_elements extends Backend
 			foreach ($GLOBALS['TL_DCA']['tl_datamaps_elements']['fields']['published']['save_callback'] as $callback) {
 				if (is_array($callback)) {
 					$this->import($callback[0]);
-					$blnVisible = $this->$callback[0]->$callback[1]($blnVisible, ($dc ?: $this));
+					$blnVisible = $this->{$callback[0]}->{$callback[1]}($blnVisible, ($dc ?: $this));
 				} elseif (is_callable($callback)) {
 					$blnVisible = $callback($blnVisible, $this);
 				}
