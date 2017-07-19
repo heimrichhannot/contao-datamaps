@@ -95,7 +95,7 @@ class DataMap implements \ArrayAccess, \Countable, \IteratorAggregate
 			$this->first();
 		}
 
-		$this->arrItems[$this->intIndex]->$strKey = $varValue;
+		$this->arrItems[$this->intIndex]->{$strKey} = $varValue;
 	}
 
 
@@ -113,9 +113,9 @@ class DataMap implements \ArrayAccess, \Countable, \IteratorAggregate
 			$this->first();
 		}
 
-		if (isset($this->arrItems[$this->intIndex]->$strKey))
+		if (isset($this->arrItems[$this->intIndex]->{$strKey}))
 		{
-			return $this->arrItems[$this->intIndex]->$strKey;
+			return $this->arrItems[$this->intIndex]->{$strKey};
 		}
 
 		return null;
@@ -136,7 +136,7 @@ class DataMap implements \ArrayAccess, \Countable, \IteratorAggregate
 			$this->first();
 		}
 
-		return isset($this->arrItems[$this->intIndex]->$strKey);
+		return isset($this->arrItems[$this->intIndex]->{$strKey});
 	}
 
 	/**
@@ -243,7 +243,7 @@ class DataMap implements \ArrayAccess, \Countable, \IteratorAggregate
 
 		while ($this->next())
 		{
-			$return[] = $this->$strKey;
+			$return[] = $this->{$strKey};
 		}
 
 		return $return;
