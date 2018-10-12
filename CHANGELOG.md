@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.1.8] - 2018-10-12
+
+### Added
+- NRW
+
 ## [1.1.7] - 2017-12-11
 
 ### Changed

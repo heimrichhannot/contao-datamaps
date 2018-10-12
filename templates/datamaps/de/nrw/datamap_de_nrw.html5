@@ -1,0 +1,46 @@
+geographyConfig: {
+	dataUrl: 'system/modules/datamaps/assets/mapdata/custom/de/de-nrw.json',
+	highlightOnHover: <?= $this->highlightOnHover; ?>,
+	highlightFillColor : '<?= $this->highlightFillColor ?: 'rgb(252,141,89)'; ?>',
+	highlightBorderColor : '<?= $this->highlightBorderColor ?: 'rgba(250, 15, 160, 0.2)'; ?>',
+	highlightBorderWidth : <?= $this->highlightBorderWidth ?: 2; ?>,
+	popupOnHover: <?= $this->popupOnHover; ?>
+},
+setProjection: function(element, options) {
+	var projection = d3.geo.mercator()
+					 .center([7.33, 51.28])
+					 .rotate([0, 0])
+					 .scale(element.offsetWidth * 15)
+                     .translate([element.offsetWidth / 2.5, element.offsetHeight / 1.8]);
+
+	var path = d3.geo.path().projection(projection);
+
+	return {path: path, projection: projection};
+},
+scope: 'de-nrw',
+width: null, //if not null, datamaps will grab the width of 'element',
+height: null, //if not null, datamaps will grab the height of 'element'
+responsive: true, //if true, call `resize()` on the map object when it should adjust it's size
+aspectRatio: 1.01,
+done: function() {}, //callback when the map is done drawing
+bubblesConfig: {
+    radius: 1,
+    borderWidth: 4,
+    borderColor: '#FFFFFF',
+	fillOpacity: 1,
+    popupOnHover: false,
+	highlightOnHover: true,
+	highlightFillColor: 'rgb(179, 0, 13)',
+	highlightBorderColor: 'rgb(179, 0, 13)',
+	highlightBorderWidth: 4,
+	highlightFillOpacity: 1,
+	popupTemplate: function(geography, data) {
+		return '<div class="hoverinfo"><strong>' + data.title + '</strong></div>';
+	}
+},
+arcConfig: {
+	strokeColor: '#DD1C77',
+	strokeWidth: 1,
+	arcSharpness: 1,
+	animationSpeed: 600
+},<?php echo $this->config; ?>
