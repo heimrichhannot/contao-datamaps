@@ -11,8 +11,8 @@
 /**
  * Constants
  */
-define(DATAMAP_ELEMENT_BUBBLE, 'BUBBLE');
-define(DATAMAP_ELEMENT_STATE, 'STATE');
+define('DATAMAP_ELEMENT_BUBBLE', 'BUBBLE');
+define('DATAMAP_ELEMENT_STATE', 'STATE');
 
 /**
  * Content elements

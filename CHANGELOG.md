@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.1.10] - 2018-11-09
+
+### Fixed
+- undefined constant warning
+
 ## [1.1.9] - 2017-10-12
 
 ### Fixed
