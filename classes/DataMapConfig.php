@@ -12,6 +12,8 @@
 namespace HeimrichHannot\Datamaps;
 
 
+use Contao\FrontendTemplate;
+
 class DataMapConfig extends \Controller
 {
 
@@ -28,13 +30,11 @@ class DataMapConfig extends \Controller
 
 	public static function createConfigJs($objConfig, $debug = false)
 	{
-		if(!static::isJQueryEnabled()) return false;
-
 		$objInstance = new static($objConfig);
 
 		$cache = !$GLOBALS['TL_CONFIG']['debugMode'];
 
-		$objT = new \FrontendTemplate('datamap.defaults');
+		$objT = new FrontendTemplate('datamap.defaults');
 		$objT->config = $objInstance->getConfigJs();
 		$objT->bubbles = $objInstance->getConfigBubblesJs();
 		$objT->states = $objInstance->getConfigStateJs();
@@ -52,7 +52,7 @@ class DataMapConfig extends \Controller
 		if(static::doRewrite($objConfig, $objFile, $objFileMinified, $cache, $debug))
 		{
 			$strChunk = $objT->parse();
-			$objFile->write($objT->parse());
+			$objFile->write($strChunk);
 			$objFile->close();
 
 			// minify js
@@ -85,18 +85,6 @@ class DataMapConfig extends \Controller
 		}
 
 		return $rewrite;
-	}
-
-	public static function isJQueryEnabled()
-	{
-		global $objPage;
-
-		$blnMobile = ($objPage->mobileLayout && \Environment::get('agent')->mobile);
-
-		$intId = ($blnMobile && $objPage->mobileLayout) ? $objPage->mobileLayout : $objPage->layout;
-		$objLayout = \LayoutModel::findByPk($intId);
-
-		return $objLayout->addJQuery;
 	}
 
 	protected function getConfigJs()

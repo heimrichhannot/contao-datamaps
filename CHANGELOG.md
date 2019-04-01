@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2019-04-01
+
+#### Changed
+- jquery not required to be activated in page layout (fixed encore bundle compatibility)
+- updated content element backend template
+
 ## [1.1.10] - 2018-11-09
 
 ### Fixed

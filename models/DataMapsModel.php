@@ -11,7 +11,18 @@
 namespace HeimrichHannot\Datamaps;
 
 
-class DataMapsModel extends \Model
+use Contao\Model;
+
+/**
+ * Class DataMapsModel
+ * @package HeimrichHannot\Datamaps
+ *
+ * @property int $id
+ * @property int $tstamp
+ * @property string|bool $rewrite
+ * @property string $title
+ */
+class DataMapsModel extends Model
 {
 
 	protected static $strTable = 'tl_datamaps';

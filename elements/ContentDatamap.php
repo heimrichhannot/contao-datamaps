@@ -11,7 +11,10 @@
 namespace HeimrichHannot\Datamaps;
 
 
-class ContentDatamap extends \ContentElement
+use Contao\BackendTemplate;
+use Contao\ContentElement;
+
+class ContentDatamap extends ContentElement
 {
 	protected $strTemplate = 'ce_datamap';
 
@@ -19,16 +22,17 @@ class ContentDatamap extends \ContentElement
 
 	public function generate()
 	{
+        $this->objConfig = DataMapsModel::findByPk($this->datamap);
+        if ($this->objConfig === null) return;
+
 		if (TL_MODE == 'BE')
 		{
-			$this->strTemplate = 'be_wildcard';
-			$this->Template = new \BackendTemplate($this->strTemplate);
-			$this->Template->title = $this->headline;
+		    $template = new BackendTemplate('be_wildcard');
+		    $template->title = $this->headline;
+
+		    $template->wildcard = $GLOBALS['TL_LANG']['tl_datamaps_elements']['references']['CONFIG'] ?: 'Configuration'.': '.$this->objConfig->title;
+			return $template->parse();
 		}
-
-		$this->objConfig = DataMapsModel::findByPk($this->datamap);
-
-		if ($this->objConfig === null) return;
 
 		return parent::generate();
 	}

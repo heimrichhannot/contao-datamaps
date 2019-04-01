@@ -34,3 +34,4 @@ $GLOBALS['TL_LANG']['tl_datamaps_elements']['delete']     		= array('Delete elem
  */
 $GLOBALS['TL_LANG']['tl_datamaps_elements']['references']['BUBBLE'] = 'Bubble';
 $GLOBALS['TL_LANG']['tl_datamaps_elements']['references']['STATE'] = 'State';
+$GLOBALS['TL_LANG']['tl_datamaps_elements']['references']['CONFIG'] = 'Config';
