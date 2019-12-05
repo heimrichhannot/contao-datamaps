@@ -12,6 +12,7 @@
 namespace HeimrichHannot\Datamaps;
 
 
+use Contao\File;
 use Contao\FrontendTemplate;
 
 class DataMapConfig extends \Controller
@@ -44,7 +45,14 @@ class DataMapConfig extends \Controller
 		$strFile = 'assets/js/' . $strName . '.js';
 		$strFileMinified = 'assets/js/' . $strName . '.min.js';
 
-		$objFile = new \File($strFile, file_exists(TL_ROOT . '/' . $strFile));
+		if (!file_exists(TL_ROOT . '/' . $strFile)) {
+		    \File::putContent($strFile, '');
+        }
+		$objFile = new \File($strFile, );
+
+        if (!file_exists(TL_ROOT . '/' . $strFileMinified)) {
+            \File::putContent($strFileMinified, '');
+        }
 		$objFileMinified = new \File($strFileMinified, file_exists(TL_ROOT . '/' . $strFileMinified));
 		$minify = $cache && class_exists('\MatthiasMullie\Minify\JS');
 

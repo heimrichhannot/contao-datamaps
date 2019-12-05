@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.2.1] - 2019-08-08
+
+#### Fixed
+- js file not created in contao 4
+
 ## [1.2.0] - 2019-04-01
 
 #### Changed
