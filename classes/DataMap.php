@@ -11,6 +11,8 @@
 namespace HeimrichHannot\Datamaps;
 
 
+use Contao\Frontend;
+
 class DataMap implements \ArrayAccess, \Countable, \IteratorAggregate
 {
 	/**
@@ -43,7 +45,7 @@ class DataMap implements \ArrayAccess, \Countable, \IteratorAggregate
 
 		$strTemplate = $GLOBALS['TL_DATAMAPS'][$strType];
 
-		$strTemplatePath = \Frontend::getTemplate($strTemplate);
+		$strTemplatePath = Frontend::getTemplate($strTemplate);
 
 		$strContent = file_get_contents($strTemplatePath);
 		

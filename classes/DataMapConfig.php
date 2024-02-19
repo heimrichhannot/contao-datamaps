@@ -12,8 +12,13 @@
 namespace HeimrichHannot\Datamaps;
 
 
+use Contao\ArticleModel;
+use Contao\Config;
+use Contao\Controller;
 use Contao\File;
 use Contao\FrontendTemplate;
+use Contao\StringUtil;
+use MatthiasMullie\Minify\JS;
 
 class DataMapConfig extends \Controller
 {
@@ -46,14 +51,14 @@ class DataMapConfig extends \Controller
 		$strFileMinified = 'assets/js/' . $strName . '.min.js';
 
 		if (!file_exists(TL_ROOT . '/' . $strFile)) {
-		    \File::putContent($strFile, '');
+		    File::putContent($strFile, '');
         }
-		$objFile = new \File($strFile, );
+		$objFile = new File($strFile);
 
         if (!file_exists(TL_ROOT . '/' . $strFileMinified)) {
-            \File::putContent($strFileMinified, '');
+            File::putContent($strFileMinified, '');
         }
-		$objFileMinified = new \File($strFileMinified, file_exists(TL_ROOT . '/' . $strFileMinified));
+		$objFileMinified = new File($strFileMinified, file_exists(TL_ROOT . '/' . $strFileMinified));
 		$minify = $cache && class_exists('\MatthiasMullie\Minify\JS');
 
 		// simple file caching
@@ -66,8 +71,8 @@ class DataMapConfig extends \Controller
 			// minify js
 			if($minify)
 			{
-				$objFileMinified = new \File($strFileMinified);
-				$objMinify = new \MatthiasMullie\Minify\JS();
+				$objFileMinified = new File($strFileMinified);
+				$objMinify = new JS();
 				$objMinify->add($strChunk);
 				$objFileMinified->write(rtrim($objMinify->minify(), ";") . ";"); // append semicolon, otherwise "(intermediate value)(...) is not a function"
 				$objFileMinified->close();
@@ -108,7 +113,7 @@ class DataMapConfig extends \Controller
 					$arrConfig['fills']['defaultFill'] = $data;
 				break;
 				case 'fills':
-					$arrFills = deserialize($data, true);
+					$arrFills = StringUtil::deserialize($data, true);
 
 					foreach($arrFills as $arrFill)
 					{
@@ -160,7 +165,7 @@ class DataMapConfig extends \Controller
 
 			if($arrData['eval']['multiple'] || $arrData['inputType'] == 'multiColumnWizard')
 			{
-				$value = deserialize($value, true);
+				$value = StringUtil::deserialize($value, true);
 			}
 
 			// check type as well, otherwise
@@ -246,28 +251,28 @@ class DataMapConfig extends \Controller
 			// Link to an external page
 			case 'external':
 				if (substr($objItem->url, 0, 7) == 'mailto:') {
-					self::$arrUrlCache[$strCacheKey] = \StringUtil::encodeEmail($objItem->url);
+					self::$arrUrlCache[$strCacheKey] = StringUtil::encodeEmail($objItem->url);
 				} else {
-					self::$arrUrlCache[$strCacheKey] = ampersand($objItem->url);
+					self::$arrUrlCache[$strCacheKey] = StringUtil::ampersand($objItem->url);
 				}
 				break;
 
 			// Link to an internal page
 			case 'internal':
 				if (($objTarget = $objItem->getRelated('jumpTo')) !== null) {
-					self::$arrUrlCache[$strCacheKey] = ampersand(\Controller::generateFrontendUrl($objTarget->row()));
+					self::$arrUrlCache[$strCacheKey] = StringUtil::ampersand(Controller::generateFrontendUrl($objTarget->row()));
 				}
 				break;
 
 			// Link to an article
 			case 'article':
-				if (($objArticle = \ArticleModel::findByPk($objItem->articleId, array('eager' => true))) !== null
+				if (($objArticle = ArticleModel::findByPk($objItem->articleId, array('eager' => true))) !== null
 					&& ($objPid = $objArticle->getRelated('pid')) !== null
 				) {
-					self::$arrUrlCache[$strCacheKey] = ampersand(
-						\Controller::generateFrontendUrl(
+					self::$arrUrlCache[$strCacheKey] = StringUtil::ampersand(
+						Controller::generateFrontendUrl(
 							$objPid->row(),
-							'/articles/' . ((!\Config::get('disableAlias')
+							'/articles/' . ((!Config::get('disableAlias')
 											 && $objArticle->alias != '') ? $objArticle->alias : $objArticle->id)
 						)
 					);
@@ -296,8 +301,8 @@ class DataMapConfig extends \Controller
 		return $strClass;
 	}
 
-	public function getCSSClassFromModel($objConfig)
+	public static function getCSSClassFromModel($objConfig)
 	{
-		return standardize($objConfig->type);
+		return StringUtil::standardize($objConfig->type);
 	}
 }

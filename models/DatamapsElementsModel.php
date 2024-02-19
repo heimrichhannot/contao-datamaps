@@ -11,7 +11,10 @@
 namespace HeimrichHannot\Datamaps;
 
 
-class DatamapsElementsModel extends \Model
+use Contao\Model;
+use Contao\Model\Collection;
+
+class DatamapsElementsModel extends Model
 {
 
 	protected static $strTable = 'tl_datamaps_elements';
@@ -26,7 +29,7 @@ class DatamapsElementsModel extends \Model
 	 * @param integer $intOffset   An optional offset
 	 * @param array   $arrOptions  An optional options array
 	 *
-	 * @return \Model\Collection|null A collection of models or null if there are no news
+	 * @return Collection|null A collection of models or null if there are no news
 	 */
 	public static function findPublishedByPidsAndTypes($arrPids, $arrTypes=array(DATAMAP_ELEMENT_BUBBLE), $intLimit=0, $intOffset=0, array $arrOptions=array())
 	{

@@ -43,12 +43,14 @@ $GLOBALS['TL_MODELS']['tl_datamaps_elements'] = 'HeimrichHannot\Datamaps\DataMap
 /**
  * Datamaps config
  */
+
+
 $GLOBALS['TL_DATAMAPS'] = array_merge
 (
-    is_array($GLOBALS['TL_DATAMAPS']) ? $GLOBALS['TL_DATAMAPS'] : [],
+    $GLOBALS['TL_DATAMAPS'] ?? [],
     [
         'de_federal_states' => 'datamap_de_federal_states',
-        'de_nrw'            => 'datamap_de_nrw',
-        'world_states'      => 'datamap_world_states'
+        'de_nrw' => 'datamap_de_nrw',
+        'world_states' => 'datamap_world_states'
     ]
 );
