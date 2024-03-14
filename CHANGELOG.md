@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 2024-03-14
+- Changed: allow php 8
+- Changed: raised dependencies for contao and php
+
 ## [1.3.0] - 2020-06-09
 - updated bundled libraries
 
